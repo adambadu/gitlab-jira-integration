@@ -18,6 +18,7 @@ jira:
   username: gitlab
   password: gitlab
   url: http://localhost:8090
+  keyPattern: \s*(PLK-\d+)
   transitions:
     - name: Closed
       # Case insensitive

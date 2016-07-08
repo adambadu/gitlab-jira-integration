@@ -13,7 +13,7 @@ import fr.mmarie.api.jira.response.CommentResponse;
 import fr.mmarie.api.jira.response.TransitionResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import retrofit.Callback;
+import org.apache.commons.lang3.StringUtils;
 import retrofit.JacksonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -37,7 +37,9 @@ public class JiraService {
      * Matches issues with name like : #TEST-1, does not support special characters in
      * project name, #TEST-TEST-1 won't match.
      */
-    public static final Pattern ISSUE_PATTERN = Pattern.compile("#\\s*(\\w+-\\d+)");
+    public static final Pattern DEFAULT_ISSUE_PATTERN = Pattern.compile("#\\s*(\\w+-\\d+)");
+
+    private Pattern issuePattern;
 
     private final JiraConfiguration jiraConfiguration;
 
@@ -46,6 +48,9 @@ public class JiraService {
     @Inject
     public JiraService(@NonNull JiraConfiguration jiraConfiguration) {
         this.jiraConfiguration = jiraConfiguration;
+
+        this.issuePattern = StringUtils.isNotBlank(jiraConfiguration.getKeyPattern()) ?
+                Pattern.compile(jiraConfiguration.getKeyPattern()) : DEFAULT_ISSUE_PATTERN;
 
         OkHttpClient httpClient = new OkHttpClient();
         httpClient.interceptors().add(chain -> {
@@ -120,7 +125,7 @@ public class JiraService {
     public List<String> extractIssuesFromMessage(String message) {
         List<String> issues = Lists.newArrayList();
 
-        Matcher matcher = ISSUE_PATTERN.matcher(message);
+        Matcher matcher = DEFAULT_ISSUE_PATTERN.matcher(message);
 
         while (matcher.find()) {
             issues.add(matcher.group(1));

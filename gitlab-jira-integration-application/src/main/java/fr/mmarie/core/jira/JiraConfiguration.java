@@ -29,6 +29,11 @@ public class JiraConfiguration {
     @JsonProperty
     private String url;
 
+    @NotEmpty
+    @NotNull
+    @JsonProperty
+    private String keyPattern;
+
     @NotNull
     @JsonProperty
     private List<TransitionConfiguration> transitions = Lists.newArrayList();
@@ -37,10 +42,12 @@ public class JiraConfiguration {
     public JiraConfiguration(String username,
                              String password,
                              String url,
+                             String keyPattern,
                              List<TransitionConfiguration> transitions) {
         this.username = username;
         this.password = password;
         this.url = url;
+        this.keyPattern = keyPattern;
         this.transitions = transitions;
     }
 }

@@ -37,6 +37,7 @@ public class JiraServiceTestIT {
     public JiraConfiguration jiraConfiguration = new JiraConfiguration("username",
             "password",
             String.format("http://localhost:%d", PORT),
+            null,
             ImmutableList.of(new TransitionConfiguration("Close", ImmutableList.of("close", "fix"))));
 
     public JiraService jiraService;
