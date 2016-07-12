@@ -125,7 +125,7 @@ public class JiraService {
     public List<String> extractIssuesFromMessage(String message) {
         List<String> issues = Lists.newArrayList();
 
-        Matcher matcher = DEFAULT_ISSUE_PATTERN.matcher(message);
+        Matcher matcher = issuePattern.matcher(message);
 
         while (matcher.find()) {
             issues.add(matcher.group(1));
